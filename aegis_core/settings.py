@@ -12,12 +12,9 @@ except ImportError:
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-bjf#!8=3hnua7jz&y0!$vmn#r*i%ib@x$q1g5kli%6&eys!kt7')
 
-DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
+DEBUG = False
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-
-if not DEBUG:
-    ALLOWED_HOSTS.append('.onrender.com')
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'daphne',
