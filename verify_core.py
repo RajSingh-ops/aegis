@@ -13,14 +13,12 @@ def test_orchestrator_flow():
     
     orchestrator = AuditorOrchestrator()
     
-    # Test 1: Normal Operation
     print("\nTest 1: Normal Input")
     response1 = orchestrator.process_input("Surgeon is proceeding with the incision.")
     print(f"Response: {response1['content']}")
     print(f"Thought Signature: {response1['thought_signature']}")
     assert response1['thought_signature'] is not None, "Thought Signature missing!"
 
-    # Test 2: Safety Violation (Trigger Tool)
     print("\nTest 2: Safety Violation Input")
     response2 = orchestrator.process_input("The surgeon is using an unsafe scalpel technique.")
     print(f"Response: {response2['content']}")

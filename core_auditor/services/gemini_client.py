@@ -5,13 +5,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 class GeminiClient:
-    """
-    Wrapper for Google Gemini API with function calling support.
-    Manages chat sessions and tool execution for AEGIS.
-    """
     
     def __init__(self):
-        """Initialize Gemini client with API key and model configuration"""
         if not settings.GEMINI_API_KEY:
             logger.warning("GEMINI_API_KEY not set. Using simulation mode.")
             self.enabled = False
@@ -32,7 +27,6 @@ class GeminiClient:
             self.enabled = False
     
     def _get_system_instruction(self):
-        """Define AEGIS system instruction for Gemini"""
         return """You are AEGIS (Advanced Evaluation and Governance Intelligence System), an AI safety auditor monitoring high-stakes operations in real-time.
 
 Your role and responsibilities:
@@ -56,20 +50,10 @@ Guidelines:
 Remember: Lives may depend on your accurate and timely analysis."""
     
     def _get_tools(self):
-        """Import and return AEGIS function declarations"""
         from .tools import AEGIS_TOOLS
         return AEGIS_TOOLS
     
     def start_chat(self, history=None):
-        """
-        Start or resume a chat session with optional history.
-        
-        Args:
-            history: Optional conversation history to resume from
-            
-        Returns:
-            Chat session object
-        """
         if not self.enabled:
             return None
         
@@ -78,19 +62,6 @@ Remember: Lives may depend on your accurate and timely analysis."""
         return self.chat
     
     def send_message(self, message, stream=False):
-        """
-        Send message to Gemini and get response.
-        
-        Args:
-            message: Text message or Content object to send
-            stream: Whether to stream the response
-            
-        Returns:
-            Response object from Gemini
-            
-        Raises:
-            Exception: If API call fails
-        """
         if not self.enabled:
             raise Exception("Gemini client not enabled. Check API key configuration.")
         
@@ -106,14 +77,7 @@ Remember: Lives may depend on your accurate and timely analysis."""
             raise
     
     def get_history(self):
-        """
-        Get conversation history from current chat session.
-        
-        Returns:
-            List of conversation turns or empty list if no chat
-        """
         return self.chat.history if self.chat else []
     
     def is_enabled(self):
-        """Check if Gemini client is properly configured and enabled"""
         return self.enabled

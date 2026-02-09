@@ -2,11 +2,7 @@ from datetime import datetime
 from analytics.models import Deviation
 import google.generativeai as genai
 
-# Integrated function that saves to database
 def log_deviation(severity, description, recommended_action):
-    """
-    Logs a safety deviation to the operational analytics pipeline.
-    """
     deviation = Deviation.objects.create(
         severity=severity.upper(),
         description=description,
@@ -15,11 +11,7 @@ def log_deviation(severity, description, recommended_action):
     print(f"[ANALYTICS] Deviation Logged: [{severity}] {description} -> {recommended_action}")
     return {"status": "success", "id": str(deviation.id), "timestamp": deviation.timestamp.isoformat()}
 
-# Mock function for Knowledge Vault retrieval
 def search_knowledge_vault(query):
-    """
-    Searches the 2M token Knowledge Vault for relevant safety protocols.
-    """
     print(f"[KNOWLEDGE VAULT] Searching for: {query}")
     return {
         "results": [
@@ -28,7 +20,6 @@ def search_knowledge_vault(query):
         ]
     }
 
-# Gemini function declarations for tool calling
 AEGIS_TOOLS = [
     genai.protos.Tool(
         function_declarations=[

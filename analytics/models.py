@@ -13,7 +13,6 @@ class Deviation(models.Model):
     description = models.TextField()
     recommended_action = models.TextField()
     
-    # Metadata fields
     session_id = models.CharField(max_length=100, blank=True, null=True)
     tool_signature = models.CharField(max_length=255, blank=True, null=True)
 

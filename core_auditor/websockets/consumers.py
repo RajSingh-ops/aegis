@@ -13,13 +13,11 @@ class AuditorConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         try:
-            # Initialize orchestrator here to avoid blocking constructor
             if self.orchestrator is None:
                 self.orchestrator = await sync_to_async(AuditorOrchestrator)()
             
             await self.accept()
             
-            # Check if Gemini is enabled
             gemini_status = "Gemini AI Active" if self.orchestrator.gemini.is_enabled() else "Simulation Mode"
             
             await self.send(text_data=json.dumps({
@@ -50,12 +48,10 @@ class AuditorConsumer(AsyncWebsocketConsumer):
 
             logger.info(f"Received message: {message}")
 
-            # Process with orchestrator (run in thread pool to avoid blocking)
             response = await sync_to_async(self.orchestrator.process_input)(message)
             
             logger.info(f"Response from orchestrator: content={bool(response.get('content'))}, tool_use={bool(response.get('tool_use'))}")
             
-            # Handle Tool Execution
             if response.get("tool_use"):
                 tool_name = response["tool_use"]["name"]
                 tool_args = response["tool_use"]["args"]

@@ -1,17 +1,10 @@
-"""
-Test script to verify Gemini API integration.
-Run this to check if your API key is working before starting the server.
-"""
-
 import os
 import sys
 from pathlib import Path
 
-# Add project root to path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-# Setup Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aegis_core.settings')
 import django
 django.setup()
@@ -21,15 +14,12 @@ from dotenv import load_dotenv
 from django.conf import settings
 
 def test_api_connection():
-    """Test basic Gemini API connection"""
     print("=" * 60)
     print("AEGIS - Gemini API Connection Test")
     print("=" * 60)
     
-    # Load environment
     load_dotenv()
     
-    # Check API key
     api_key = settings.GEMINI_API_KEY
     if not api_key:
         print("\n❌ FAILED: GEMINI_API_KEY not found in .env file")
@@ -42,7 +32,6 @@ def test_api_connection():
     print(f"\n✅ API Key found: {api_key[:10]}...{api_key[-4:]}")
     print(f"✅ Model: {settings.GEMINI_MODEL}")
     
-    # Test connection
     try:
         print("\n🔄 Testing connection to Gemini API...")
         genai.configure(api_key=api_key)
@@ -64,7 +53,6 @@ def test_api_connection():
         return False
 
 def test_function_calling():
-    """Test function calling capability"""
     print("\n" + "=" * 60)
     print("Testing Function Calling")
     print("=" * 60)
@@ -81,14 +69,12 @@ def test_function_calling():
         
         print("✅ Client initialized successfully")
         
-        # Test function calling
         print("\n🔄 Testing function call detection...")
         client.start_chat()
         response = client.send_message(
             "I see an unsafe condition: someone without gloves touching sterile equipment. This is a critical safety violation."
         )
         
-        # Check if function was called
         has_function_call = False
         if response.candidates and len(response.candidates) > 0:
             for part in response.candidates[0].content.parts:
@@ -108,7 +94,6 @@ def test_function_calling():
         return False
 
 def test_orchestrator():
-    """Test the full orchestrator"""
     print("\n" + "=" * 60)
     print("Testing AuditorOrchestrator")
     print("=" * 60)
@@ -124,7 +109,6 @@ def test_orchestrator():
         else:
             print("✅ Orchestrator initialized with Gemini AI")
         
-        # Test input processing
         print("\n🔄 Testing input processing...")
         response = orchestrator.process_input("Test message: monitor surgical procedure")
         
@@ -144,14 +128,12 @@ def test_orchestrator():
 if __name__ == "__main__":
     print("\n🚀 Starting Gemini API Integration Tests\n")
     
-    # Run tests
     test1 = test_api_connection()
     
     if test1:
         test2 = test_function_calling()
         test3 = test_orchestrator()
         
-        # Summary
         print("\n" + "=" * 60)
         print("TEST SUMMARY")
         print("=" * 60)
